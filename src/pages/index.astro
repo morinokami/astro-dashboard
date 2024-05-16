@@ -2,13 +2,13 @@
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Image } from "astro:assets";
 
-import AcmeLogo from "@/components/acme-logo.astro";
+import AcmeLogo from "@/components/AcmeLogo.astro";
 import heroDesktop from "@/images/hero-desktop.png";
 import heroMobile from "@/images/hero-mobile.png";
-import Layout from "@/layouts/Layout.astro";
+import RootLayout from "@/layouts/RootLayout.astro";
 ---
 
-<Layout>
+<RootLayout>
   <main class="flex min-h-screen flex-col p-6">
     <div
       class="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52"
@@ -55,4 +55,4 @@ import Layout from "@/layouts/Layout.astro";
       </div>
     </div>
   </main>
-</Layout>
+</RootLayout>
