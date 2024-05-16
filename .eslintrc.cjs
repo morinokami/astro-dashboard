@@ -19,5 +19,31 @@ module.exports = {
       },
       rules: {},
     },
+    {
+      files: ["*.ts"],
+      parser: "@typescript-eslint/parser",
+      extends: ["plugin:@typescript-eslint/recommended"],
+      rules: {
+        "@typescript-eslint/no-unused-vars": "error",
+      },
+    },
+    {
+      files: ["*.tsx"],
+      parser: "@typescript-eslint/parser",
+      plugins: ["react", "@typescript-eslint"],
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: ["./tsconfig.json"],
+      },
+      extends: [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "plugin:@typescript-eslint/recommended",
+      ],
+      rules: {
+        "@typescript-eslint/no-unused-vars": "error",
+      },
+    },
   ],
 };
