@@ -2,17 +2,9 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { Image } from "astro:assets";
 
-interface Props {
-  latestInvoices: {
-    amount: string;
-    name: string;
-    imageUrl: string;
-    email: string;
-    id: string;
-  }[];
-}
+import { fetchLatestInvoices } from "@/lib/data";
 
-const { latestInvoices } = Astro.props;
+const latestInvoices = await fetchLatestInvoices();
 ---
 
 <div class="flex w-full flex-col md:col-span-4">

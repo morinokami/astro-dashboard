@@ -1,14 +1,11 @@
 ---
 import { CalendarIcon } from "@heroicons/react/24/outline";
-import { Revenue } from "astro:db";
 
+import { fetchRevenue } from "@/lib/data";
 import { generateYAxis } from "@/lib/utils";
 
-interface Props {
-  revenue: (typeof Revenue.$inferSelect)[];
-}
+const revenue = await fetchRevenue();
 
-const { revenue } = Astro.props;
 const chartHeight = 350;
 
 const { yAxisLabels, topLabel } = generateYAxis(revenue);
