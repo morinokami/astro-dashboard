@@ -1,9 +1,8 @@
 import { column, defineDb, defineTable } from "astro:db";
-import * as crypto from "node:crypto";
 
 const Users = defineTable({
   columns: {
-    id: column.text({ default: crypto.randomUUID(), primaryKey: true }),
+    id: column.text({ primaryKey: true }),
     name: column.text(),
     email: column.text({ unique: true }),
     password: column.text(),
@@ -12,8 +11,11 @@ const Users = defineTable({
 
 const Invoices = defineTable({
   columns: {
-    id: column.text({ default: crypto.randomUUID(), primaryKey: true }),
-    customerId: column.text({ name: "customer_id" }),
+    id: column.text({ primaryKey: true }),
+    customerId: column.text({
+      name: "customer_id",
+      references: () => Customers.columns.id,
+    }),
     amount: column.number(),
     status: column.text(),
     date: column.date(),
@@ -22,7 +24,7 @@ const Invoices = defineTable({
 
 const Customers = defineTable({
   columns: {
-    id: column.text({ default: crypto.randomUUID(), primaryKey: true }),
+    id: column.text({ primaryKey: true }),
     name: column.text(),
     email: column.text(),
     imageUrl: column.text({ name: "image_url" }),

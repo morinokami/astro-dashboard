@@ -25,6 +25,7 @@ export default {
     },
     fontFamily: {
       sans: ["Inter", ...defaultTheme.fontFamily.sans],
+      lusitana: ["Lusitana", ...defaultTheme.fontFamily.serif],
     },
   },
   plugins: [require("@tailwindcss/forms")],
