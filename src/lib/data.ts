@@ -6,6 +6,8 @@ import {
   db,
   desc,
   eq,
+  like,
+  or,
   sum,
 } from "astro:db";
 import { formatCurrency } from "./utils";
@@ -18,12 +20,12 @@ export async function fetchRevenue() {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
-    console.log("Fetching revenue data...");
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // console.log("Fetching revenue data...");
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await db.select().from(Revenue);
 
-    console.log("Data fetch completed after 3 seconds.");
+    // console.log("Data fetch completed after 3 seconds.");
 
     return data;
   } catch (error) {
@@ -97,5 +99,69 @@ export async function fetchCardData() {
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch card data.");
+  }
+}
+
+const ITEMS_PER_PAGE = 6;
+export async function fetchFilteredInvoices(
+  query: string,
+  currentPage: number,
+) {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const invoices = await db
+      .select({
+        id: Invoices.id,
+        amount: Invoices.amount,
+        date: Invoices.date,
+        status: Invoices.status,
+        name: Customers.name,
+        email: Customers.email,
+        imageUrl: Customers.imageUrl,
+      })
+      .from(Invoices)
+      .innerJoin(Customers, eq(Invoices.customerId, Customers.id))
+      .where(
+        or(
+          like(Invoices.amount, `%${query}%`),
+          like(Invoices.date, `%${query}%`),
+          like(Invoices.status, `%${query}%`),
+          like(Customers.name, `%${query}%`),
+          like(Customers.email, `%${query}%`),
+        ),
+      )
+      .orderBy(desc(Invoices.date))
+      .limit(ITEMS_PER_PAGE)
+      .offset(offset);
+
+    return invoices;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch invoices.");
+  }
+}
+
+export async function fetchInvoicesPages(query: string) {
+  try {
+    const result = await db
+      .select({ count: count() })
+      .from(Invoices)
+      .innerJoin(Customers, eq(Invoices.customerId, Customers.id))
+      .where(
+        or(
+          like(Invoices.amount, `%${query}%`),
+          like(Invoices.date, `%${query}%`),
+          like(Invoices.status, `%${query}%`),
+          like(Customers.name, `%${query}%`),
+          like(Customers.email, `%${query}%`),
+        ),
+      );
+
+    const totalPages = Math.ceil(Number(result[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch total number of invoices.");
   }
 }

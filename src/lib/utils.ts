@@ -7,11 +7,7 @@ export const formatCurrency = (amount: number) => {
   });
 };
 
-export const formatDateToLocal = (
-  dateStr: string,
-  locale: string = "en-US",
-) => {
-  const date = new Date(dateStr);
+export const formatDateToLocal = (date: Date, locale: string = "en-US") => {
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "short",

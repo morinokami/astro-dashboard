@@ -1,10 +1,50 @@
 ---
+export const prerender = false;
+
+import { Suspense } from "simple-stack-stream/components";
+
+import Search from "@/components/Search";
+import CreateInvoice from "@/components/invoices/CreateInvoice.astro";
+import InvoicesTable from "@/components/invoices/InvoicesTable.astro";
+import Pagination from "@/components/invoices/Pagination.astro";
+import InvoicesTableSkeleton from "@/components/skeletons/InvoicesTableSkeleton.astro";
 import DashboardLayout from "@/layouts/DashboardLayout.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
+import { fetchInvoicesPages } from "@/lib/data";
+
+const { searchParams, pathname } = Astro.url;
+const query = searchParams.get("query") || "";
+const currentPage = Number(searchParams.get("page")) || 1;
+
+const totalPages = await fetchInvoicesPages(query);
 ---
 
 <RootLayout>
   <DashboardLayout>
-    <p>Invoices Page</p>
+    <div class="w-full">
+      <div class="flex w-full items-center justify-between">
+        <h1 class="font-lusitana text-2xl">Invoices</h1>
+      </div>
+      <div class="mt-4 flex items-center justify-between gap-2 md:mt-8">
+        <Search
+          client:load
+          placeholder="Search invoices..."
+          searchParams={Object.fromEntries(searchParams.entries())}
+          pathname={pathname}
+        />
+        <CreateInvoice />
+      </div>
+      <Suspense>
+        <InvoicesTable query={query} currentPage={currentPage} />
+        <InvoicesTableSkeleton slot="fallback" />
+      </Suspense>
+      <div class="mt-5 flex w-full justify-center">
+        <Pagination
+          totalPages={totalPages}
+          searchParams={Object.fromEntries(searchParams.entries())}
+          pathname={pathname}
+        />
+      </div>
+    </div>
   </DashboardLayout>
 </RootLayout>

@@ -1,0 +1,58 @@
+---
+import { generatePagination } from "@/lib/utils";
+import PaginationArrow from "./PaginationArrow.astro";
+import PaginationNumber from "./PaginationNumber.astro";
+
+interface Props {
+  totalPages: number;
+  searchParams: Record<string, string>;
+  pathname: string;
+}
+
+const { totalPages, searchParams, pathname } = Astro.props;
+const currentPage = Number(searchParams.page) || 1;
+
+const createPageURL = (pageNumber: number | string) => {
+  const params = new URLSearchParams(searchParams);
+  params.set("page", pageNumber.toString());
+  return `${pathname}?${params.toString()}`;
+};
+
+const allPages = generatePagination(currentPage, totalPages);
+---
+
+<div class="inline-flex">
+  <PaginationArrow
+    direction="left"
+    href={createPageURL(currentPage - 1)}
+    isDisabled={currentPage <= 1}
+  />
+
+  <div class="flex -space-x-px">
+    {
+      allPages.map((page, index) => {
+        let position: "first" | "last" | "single" | "middle" | undefined;
+
+        if (index === 0) position = "first";
+        if (index === allPages.length - 1) position = "last";
+        if (allPages.length === 1) position = "single";
+        if (page === "...") position = "middle";
+
+        return (
+          <PaginationNumber
+            href={createPageURL(page)}
+            page={page}
+            position={position}
+            isActive={currentPage === page}
+          />
+        );
+      })
+    }
+  </div>
+
+  <PaginationArrow
+    direction="right"
+    href={createPageURL(currentPage + 1)}
+    isDisabled={currentPage >= totalPages}
+  />
+</div>
