@@ -19,9 +19,9 @@ const { breadcrumbs } = Astro.props;
           aria-current={breadcrumb.active}
           class:list={[breadcrumb.active ? "text-gray-900" : "text-gray-500"]}
         >
-          <a href={breadcrumb.href}>{breadcrumb.label}</a>
-          {/* space inserted? */}
-          {index < breadcrumbs.length - 1 ? (
+          <!-- prettier-ignore -->
+          <a href={breadcrumb.href}>{breadcrumb.label}</a>{
+          index < breadcrumbs.length - 1 ? (
             <span class="mx-3 inline-block">/</span>
           ) : null}
         </li>
