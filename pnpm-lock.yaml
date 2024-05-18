@@ -41,6 +41,9 @@ importers:
       astro:
         specifier: ^4.8.3
         version: 4.8.3(@types/node@20.12.12)(typescript@5.4.5)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       react:
         specifier: ^18.3.1
         version: 18.3.1

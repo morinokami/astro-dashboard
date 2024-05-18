@@ -6,6 +6,9 @@ import simpleStackStream from "simple-stack-stream";
 
 // https://astro.build/config
 export default defineConfig({
-  output: "hybrid",
+  output: "server",
   integrations: [db(), react(), simpleStackStream(), tailwind()],
+  experimental: {
+    actions: true,
+  },
 });

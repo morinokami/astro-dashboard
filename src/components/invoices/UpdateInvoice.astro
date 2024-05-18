@@ -1,7 +1,16 @@
 ---
 import { PencilIcon } from "@heroicons/react/24/outline";
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
 ---
 
-<a href="/dashboard/invoices" class="rounded-md border p-2 hover:bg-gray-100">
+<a
+  href={`/dashboard/invoices/${id}/edit`}
+  class="rounded-md border p-2 hover:bg-gray-100"
+>
   <PencilIcon className="w-5" />
 </a>

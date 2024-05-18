@@ -1,0 +1,27 @@
+---
+import Breadcrumbs from "@/components/invoices/Breadcrumbs.astro";
+import CreateInvoiceForm from "@/components/invoices/CreateInvoiceForm";
+import DashboardLayout from "@/layouts/DashboardLayout.astro";
+import RootLayout from "@/layouts/RootLayout.astro";
+import { fetchCustomers } from "@/lib/data";
+
+const customers = await fetchCustomers();
+---
+
+<RootLayout>
+  <DashboardLayout>
+    <main>
+      <Breadcrumbs
+        breadcrumbs={[
+          { label: "Invoices", href: "/dashboard/invoices" },
+          {
+            label: "Create Invoice",
+            href: "/dashboard/invoices/create",
+            active: true,
+          },
+        ]}
+      />
+      <CreateInvoiceForm client:load customers={customers} />
+    </main>
+  </DashboardLayout>
+</RootLayout>

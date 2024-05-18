@@ -2,6 +2,7 @@ import {
   Customers,
   Invoices,
   Revenue,
+  asc,
   count,
   db,
   desc,
@@ -163,5 +164,44 @@ export async function fetchInvoicesPages(query: string) {
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch total number of invoices.");
+  }
+}
+
+export async function fetchInvoiceById(id: string) {
+  try {
+    const data = await db
+      .select({
+        id: Invoices.id,
+        customerId: Invoices.customerId,
+        amount: Invoices.amount,
+        status: Invoices.status,
+      })
+      .from(Invoices)
+      .where(eq(Invoices.id, id));
+
+    const invoice = data.map((invoice) => ({
+      ...invoice,
+      // Convert amount from cents to dollars
+      amount: invoice.amount / 100,
+    }));
+
+    return invoice[0];
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch invoice.");
+  }
+}
+
+export async function fetchCustomers() {
+  try {
+    const customers = await db
+      .select({ id: Customers.id, name: Customers.name })
+      .from(Customers)
+      .orderBy(asc(Customers.name));
+
+    return customers;
+  } catch (err) {
+    console.error("Database Error:", err);
+    throw new Error("Failed to fetch all customers.");
   }
 }

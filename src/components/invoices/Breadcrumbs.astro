@@ -1,0 +1,31 @@
+---
+interface Breadcrumb {
+  label: string;
+  href: string;
+  active?: boolean;
+}
+interface Props {
+  breadcrumbs: Breadcrumb[];
+}
+
+const { breadcrumbs } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="mb-6 block">
+  <ol class="font-lusitana flex text-xl md:text-2xl">
+    {
+      breadcrumbs.map((breadcrumb, index) => (
+        <li
+          aria-current={breadcrumb.active}
+          class:list={[breadcrumb.active ? "text-gray-900" : "text-gray-500"]}
+        >
+          <a href={breadcrumb.href}>{breadcrumb.label}</a>
+          {/* space inserted? */}
+          {index < breadcrumbs.length - 1 ? (
+            <span class="mx-3 inline-block">/</span>
+          ) : null}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

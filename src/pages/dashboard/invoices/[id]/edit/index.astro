@@ -1,0 +1,31 @@
+---
+import Breadcrumbs from "@/components/invoices/Breadcrumbs.astro";
+import EditInvoiceForm from "@/components/invoices/EditInvoiceForm";
+import DashboardLayout from "@/layouts/DashboardLayout.astro";
+import RootLayout from "@/layouts/RootLayout.astro";
+import { fetchCustomers, fetchInvoiceById } from "@/lib/data";
+
+const { id } = Astro.params;
+const [invoice, customers] = await Promise.all([
+  fetchInvoiceById(id as string),
+  fetchCustomers(),
+]);
+---
+
+<RootLayout>
+  <DashboardLayout>
+    <main>
+      <Breadcrumbs
+        breadcrumbs={[
+          { label: "Invoices", href: "/dashboard/invoices" },
+          {
+            label: "Edit Invoice",
+            href: `/dashboard/invoices/${id}/edit`,
+            active: true,
+          },
+        ]}
+      />
+      <EditInvoiceForm client:load invoice={invoice} customers={customers} />
+    </main>
+  </DashboardLayout>
+</RootLayout>

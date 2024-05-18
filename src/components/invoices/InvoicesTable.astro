@@ -4,7 +4,7 @@ import { Image } from "astro:assets";
 import { fetchFilteredInvoices } from "@/lib/data";
 import { formatCurrency, formatDateToLocal } from "@/lib/utils";
 
-import DeleteInvoice from "./DeleteInvoice.astro";
+import { DeleteInvoice } from "./DeleteInvoice";
 import InvoiceStatus from "./InvoiceStatus.astro";
 import UpdateInvoice from "./UpdateInvoice.astro";
 
@@ -50,7 +50,7 @@ const invoices = await fetchFilteredInvoices(query, currentPage);
                 </div>
                 <div class="flex justify-end gap-2">
                   <UpdateInvoice id={invoice.id} />
-                  <DeleteInvoice id={invoice.id} />
+                  <DeleteInvoice client:load id={invoice.id} />
                 </div>
               </div>
             </div>
@@ -101,7 +101,7 @@ const invoices = await fetchFilteredInvoices(query, currentPage);
                 <td class="whitespace-nowrap py-3 pl-6 pr-3">
                   <div class="flex justify-end gap-3">
                     <UpdateInvoice id={invoice.id} />
-                    <DeleteInvoice id={invoice.id} />
+                    <DeleteInvoice client:load id={invoice.id} />
                   </div>
                 </td>
               </tr>
