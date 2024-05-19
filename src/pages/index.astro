@@ -1,6 +1,4 @@
 ---
-export const prerender = true;
-
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Image } from "astro:assets";
 
@@ -8,6 +6,10 @@ import AcmeLogo from "@/components/AcmeLogo.astro";
 import heroDesktop from "@/images/hero-desktop.png";
 import heroMobile from "@/images/hero-mobile.png";
 import RootLayout from "@/layouts/RootLayout.astro";
+
+if (Astro.locals.user) {
+  return Astro.redirect("/dashboard");
+}
 ---
 
 <RootLayout>

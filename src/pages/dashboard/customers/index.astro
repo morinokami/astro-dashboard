@@ -1,6 +1,11 @@
 ---
 import DashboardLayout from "@/layouts/DashboardLayout.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
+
+const user = Astro.locals.user;
+if (!user) {
+  return Astro.redirect("/login");
+}
 ---
 
 <RootLayout>

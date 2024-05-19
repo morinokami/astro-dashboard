@@ -1,4 +1,5 @@
 import * as crypto from "crypto";
+import { Argon2id } from "oslo/password";
 
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
@@ -7,7 +8,7 @@ export const users = [
     id: crypto.randomUUID(),
     name: "User",
     email: "user@nextmail.com",
-    password: "123456",
+    password: await new Argon2id().hash("123456"),
   },
 ];
 

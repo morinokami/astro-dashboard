@@ -10,6 +10,11 @@ import DashboardLayout from "@/layouts/DashboardLayout.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
 import { fetchInvoicesPages } from "@/lib/data";
 
+const user = Astro.locals.user;
+if (!user) {
+  return Astro.redirect("/login");
+}
+
 const { searchParams, pathname } = Astro.url;
 const query = searchParams.get("query") || "";
 const currentPage = Number(searchParams.get("page")) || 1;

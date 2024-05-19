@@ -6,6 +6,11 @@ import DashboardLayout from "@/layouts/DashboardLayout.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
 import { fetchCustomers, fetchInvoiceById } from "@/lib/data";
 
+const user = Astro.locals.user;
+if (!user) {
+  return Astro.redirect("/login");
+}
+
 const { id } = Astro.params;
 const [invoice, customers] = await Promise.all([
   fetchInvoiceById(id as string),

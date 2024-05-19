@@ -9,6 +9,17 @@ const Users = defineTable({
   },
 });
 
+const Session = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true }),
+    expiresAt: column.number({ name: "expires_at" }),
+    userId: column.text({
+      name: "user_id",
+      references: () => Users.columns.id,
+    }),
+  },
+});
+
 const Invoices = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
@@ -42,6 +53,7 @@ const Revenue = defineTable({
 export default defineDb({
   tables: {
     Users,
+    Session,
     Invoices,
     Customers,
     Revenue,
