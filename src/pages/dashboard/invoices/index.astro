@@ -22,7 +22,7 @@ const currentPage = Number(searchParams.get("page")) || 1;
 const totalPages = await fetchInvoicesPages(query);
 ---
 
-<RootLayout>
+<RootLayout title="Invoices">
   <DashboardLayout>
     <div class="w-full">
       <div class="flex w-full items-center justify-between">
