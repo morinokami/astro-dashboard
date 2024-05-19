@@ -2,15 +2,42 @@ import { defineAction, z } from "astro:actions";
 import { Invoices, db, eq } from "astro:db";
 import * as crypto from "node:crypto";
 
+const FormSchema = z.object({
+  id: z.string(),
+  customerId: z.string({
+    invalid_type_error: "Please select a customer.",
+  }),
+  amount: z.coerce
+    .number()
+    .gt(0, { message: "Please enter an amount greater than $0." }),
+  status: z.enum(["pending", "paid"], {
+    invalid_type_error: "Please select an invoice status.",
+  }),
+  date: z.string(),
+});
+
+const CreateInvoice = FormSchema.omit({ id: true, date: true });
+const UpdateInvoice = FormSchema.omit({ date: true });
+
 export const server = {
   createInvoice: defineAction({
     accept: "form",
-    input: z.object({
-      customerId: z.string(),
-      amount: z.coerce.number(),
-      status: z.enum(["pending", "paid"]),
-    }),
-    handler: async ({ customerId, amount, status }) => {
+    handler: async (formData) => {
+      const validatedFields = CreateInvoice.safeParse({
+        customerId: formData.get("customerId"),
+        amount: formData.get("amount"),
+        status: formData.get("status"),
+      });
+
+      if (!validatedFields.success) {
+        return {
+          success: false,
+          errors: validatedFields.error.flatten().fieldErrors,
+          message: "Missing Fields. Failed to Create Invoice.",
+        };
+      }
+
+      const { customerId, amount, status } = validatedFields.data;
       const amountInCents = amount * 100;
       const date = new Date();
       const id = crypto.randomUUID();
@@ -34,13 +61,21 @@ export const server = {
   }),
   updateInvoice: defineAction({
     accept: "form",
-    input: z.object({
-      id: z.string(),
-      customerId: z.string(),
-      amount: z.coerce.number(),
-      status: z.enum(["pending", "paid"]),
-    }),
-    handler: async ({ id, customerId, amount, status }) => {
+    handler: async (formData) => {
+      const validatedFields = UpdateInvoice.safeParse({
+        customerId: formData.get("customerId"),
+        amount: formData.get("amount"),
+        status: formData.get("status"),
+      });
+
+      if (!validatedFields.success) {
+        return {
+          errors: validatedFields.error.flatten().fieldErrors,
+          message: "Missing Fields. Failed to Update Invoice.",
+        };
+      }
+
+      const { id, customerId, amount, status } = validatedFields.data;
       const amountInCents = amount * 100;
 
       try {
