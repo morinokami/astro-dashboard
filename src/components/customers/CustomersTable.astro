@@ -1,0 +1,128 @@
+---
+import { Image } from "astro:assets";
+
+import Search from "@/components/Search";
+
+interface FormattedCustomersTable {
+  id: string;
+  name: string;
+  email: string;
+  imageUrl: string;
+  totalInvoices: number;
+  totalPending: string;
+  totalPaid: string;
+}
+interface Props {
+  customers: FormattedCustomersTable[];
+}
+
+const { customers } = Astro.props;
+
+const { searchParams, pathname } = Astro.url;
+---
+
+<div class="w-full">
+  <h1 class="font-lusitana mb-8 text-xl md:text-2xl">Customers</h1>
+  <Search
+    client:load
+    placeholder="Search customers..."
+    searchParams={Object.fromEntries(searchParams.entries())}
+    pathname={pathname}
+  />
+  <div class="mt-6 flow-root">
+    <div class="overflow-x-auto">
+      <div class="inline-block min-w-full align-middle">
+        <div class="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
+          <div class="md:hidden">
+            {
+              customers?.map((customer) => (
+                <div class="mb-2 w-full rounded-md bg-white p-4">
+                  <div class="flex items-center justify-between border-b pb-4">
+                    <div>
+                      <div class="mb-2 flex items-center">
+                        <div class="flex items-center gap-3">
+                          <Image
+                            src={customer.imageUrl}
+                            class="rounded-full"
+                            alt={`${customer.name}'s profile picture`}
+                            width={28}
+                            height={28}
+                          />
+                          <p>{customer.name}</p>
+                        </div>
+                      </div>
+                      <p class="text-sm text-gray-500">{customer.email}</p>
+                    </div>
+                  </div>
+                  <div class="flex w-full items-center justify-between border-b py-5">
+                    <div class="flex w-1/2 flex-col">
+                      <p class="text-xs">Pending</p>
+                      <p class="font-medium">{customer.totalPending}</p>
+                    </div>
+                    <div class="flex w-1/2 flex-col">
+                      <p class="text-xs">Paid</p>
+                      <p class="font-medium">{customer.totalPaid}</p>
+                    </div>
+                  </div>
+                  <div class="pt-4 text-sm">
+                    <p>{customer.totalInvoices} invoices</p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <table class="hidden min-w-full rounded-md text-gray-900 md:table">
+            <thead class="rounded-md bg-gray-50 text-left text-sm font-normal">
+              <tr>
+                <th scope="col" class="px-4 py-5 font-medium sm:pl-6">
+                  Name
+                </th>
+                <th scope="col" class="px-3 py-5 font-medium"> Email </th>
+                <th scope="col" class="px-3 py-5 font-medium">
+                  Total Invoices
+                </th>
+                <th scope="col" class="px-3 py-5 font-medium">
+                  Total Pending
+                </th>
+                <th scope="col" class="px-4 py-5 font-medium"> Total Paid </th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200 text-gray-900">
+              {
+                customers.map((customer) => (
+                  <tr class="group">
+                    <td class="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
+                      <div class="flex items-center gap-3">
+                        <Image
+                          src={customer.imageUrl}
+                          class="rounded-full"
+                          alt={`${customer.name}'s profile picture`}
+                          width={28}
+                          height={28}
+                        />
+                        <p>{customer.name}</p>
+                      </div>
+                    </td>
+                    <td class="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      {customer.email}
+                    </td>
+                    <td class="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      {customer.totalInvoices}
+                    </td>
+                    <td class="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      {customer.totalPending}
+                    </td>
+                    <td class="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
+                      {customer.totalPaid}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

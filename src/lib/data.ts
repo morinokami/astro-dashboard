@@ -9,6 +9,7 @@ import {
   eq,
   like,
   or,
+  sql,
   sum,
 } from "astro:db";
 import { formatCurrency } from "./utils";
@@ -203,5 +204,46 @@ export async function fetchCustomers() {
   } catch (err) {
     console.error("Database Error:", err);
     throw new Error("Failed to fetch all customers.");
+  }
+}
+
+export async function fetchFilteredCustomers(query: string) {
+  try {
+    const data = await db
+      .select({
+        id: Customers.id,
+        name: Customers.name,
+        email: Customers.email,
+        imageUrl: Customers.imageUrl,
+        totalInvoices: count(),
+        totalPending: sql<number>`SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END)`,
+        totalPaid: sql<number>`SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END)`,
+      })
+      .from(Customers)
+      .leftJoin(Invoices, eq(Customers.id, Invoices.customerId))
+      .where(
+        or(
+          like(Customers.name, `%${query}%`),
+          like(Customers.email, `%${query}%`),
+        ),
+      )
+      .groupBy(
+        Customers.id,
+        Customers.name,
+        Customers.email,
+        Customers.imageUrl,
+      )
+      .orderBy(asc(Customers.name));
+
+    const customers = data.map((customer) => ({
+      ...customer,
+      totalPending: formatCurrency(customer.totalPending),
+      totalPaid: formatCurrency(customer.totalPaid),
+    }));
+
+    return customers;
+  } catch (err) {
+    console.error("Database Error:", err);
+    throw new Error("Failed to fetch customer table.");
   }
 }

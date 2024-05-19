@@ -1,15 +1,24 @@
 ---
+import CustomersTable from "@/components/customers/CustomersTable.astro";
 import DashboardLayout from "@/layouts/DashboardLayout.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
+import { fetchFilteredCustomers } from "@/lib/data";
 
 const user = Astro.locals.user;
 if (!user) {
   return Astro.redirect("/login");
 }
+
+const { searchParams } = Astro.url;
+const query = searchParams.get("query") || "";
+
+const customers = await fetchFilteredCustomers(query);
 ---
 
 <RootLayout title="Customers">
   <DashboardLayout>
-    <p>Customers Page</p>
+    <main>
+      <CustomersTable customers={customers} />
+    </main>
   </DashboardLayout>
 </RootLayout>
