@@ -15,15 +15,21 @@ export const server = {
       const date = new Date();
       const id = crypto.randomUUID();
 
-      await db.insert(Invoices).values({
-        id,
-        customerId,
-        amount: amountInCents,
-        status,
-        date,
-      });
-
-      return { success: true };
+      try {
+        await db.insert(Invoices).values({
+          id,
+          customerId,
+          amount: amountInCents,
+          status,
+          date,
+        });
+        return { success: true };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Database Error: Failed to Create Invoice.",
+        };
+      }
     },
   }),
   updateInvoice: defineAction({
@@ -37,12 +43,18 @@ export const server = {
     handler: async ({ id, customerId, amount, status }) => {
       const amountInCents = amount * 100;
 
-      await db
-        .update(Invoices)
-        .set({ customerId, amount: amountInCents, status })
-        .where(eq(Invoices.id, id));
-
-      return { success: true };
+      try {
+        await db
+          .update(Invoices)
+          .set({ customerId, amount: amountInCents, status })
+          .where(eq(Invoices.id, id));
+        return { success: true };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Database Error: Failed to Update Invoice.",
+        };
+      }
     },
   }),
   deleteInvoice: defineAction({
@@ -51,9 +63,15 @@ export const server = {
       id: z.string(),
     }),
     handler: async ({ id }) => {
-      await db.delete(Invoices).where(eq(Invoices.id, id));
-
-      return { success: true };
+      try {
+        await db.delete(Invoices).where(eq(Invoices.id, id));
+        return { success: true };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Database Error: Failed to Delete Invoice.",
+        };
+      }
     },
   }),
 };
