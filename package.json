@@ -3,12 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build --remote",
-    "preview": "astro preview",
-    "astro": "astro",
-    "lint": "eslint ./src --ext .astro"
+    "dev": "bunx astro dev",
+    "build": "bunx astro check && bunx astro build --remote",
+    "preview": "bunx astro preview",
+    "astro": "bunx astro"
   },
   "dependencies": {
     "@astrojs/check": "^0.7.0",
