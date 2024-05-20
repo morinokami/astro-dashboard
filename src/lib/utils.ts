@@ -1,4 +1,4 @@
-import { Revenue } from "astro:db";
+import type { Revenue } from "astro:db";
 
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString("en-US", {
@@ -7,7 +7,7 @@ export const formatCurrency = (amount: number) => {
   });
 };
 
-export const formatDateToLocal = (date: Date, locale: string = "en-US") => {
+export const formatDateToLocal = (date: Date, locale = "en-US") => {
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "short",
