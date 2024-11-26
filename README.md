@@ -1,6 +1,6 @@
 # Astro Dashboard
 
-This project implements the [Dashboard](https://next-learn-dashboard.vercel.sh/) developed in the [Learn Next.js](https://nextjs.org/learn) course using [Astro](https://astro.build/). By leveraging Astro [DB](https://docs.astro.build/en/guides/astro-db/), [Actions](https://docs.astro.build/en/reference/configuration-reference/#experimentalactions), and Suspense (powered by [Simple stream](https://simple-stack.dev/stream)), I aimed to replicate the Next.js version of the dashboard as closely as possible.
+This project implements the [Dashboard](https://next-learn-dashboard.vercel.sh/) developed in the [Learn Next.js](https://nextjs.org/learn) course using [Astro](https://astro.build/). By leveraging Astro [DB](https://docs.astro.build/en/guides/astro-db/), [Actions](https://docs.astro.build/en/reference/configuration-reference/#experimentalactions), and [Server Islands](https://github.com/withastro/roadmap/blob/main/proposals/0050-server-islands.md), I aimed to replicate the Next.js version of the dashboard as closely as possible.
 
 You can access the application at https://next-learn-dashboard-astro.vercel.app/. Please log in using the following credentials:
 
