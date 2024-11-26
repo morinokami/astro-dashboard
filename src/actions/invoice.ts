@@ -1,5 +1,5 @@
 import { ActionError, defineAction } from "astro:actions";
-import { Invoices, db, eq } from "astro:db";
+import { Invoices, db, eq, isDbError } from "astro:db";
 import { z } from "astro:schema";
 import * as crypto from "node:crypto";
 
@@ -40,7 +40,7 @@ export const invoice = {
       } catch (error) {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Database Error: Failed to Create Invoice.",
+          message: `${isDbError(error) ? "Database Error" : "Unknown Error"}: Failed to Create Invoice.`,
         });
       }
     },
@@ -59,7 +59,7 @@ export const invoice = {
       } catch (error) {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Database Error: Failed to Update Invoice.",
+          message: `${isDbError(error) ? "Database Error" : "Unknown Error"} Error: Failed to Update Invoice.`,
         });
       }
     },
@@ -75,7 +75,7 @@ export const invoice = {
       } catch (error) {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Database Error: Failed to Delete Invoice.",
+          message: `${isDbError(error) ? "Database Error" : "Unknown Error"} Error: Failed to Delete Invoice.`,
         });
       }
     },
