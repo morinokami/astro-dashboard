@@ -1,6 +1,4 @@
 ---
-import { Suspense } from "simple-stack-stream/components";
-
 import CardWrapper from "@/components/dashboard/CardWrapper.astro";
 import LatestInvoices from "@/components/dashboard/LatestInvoices.astro";
 import RevenueChart from "@/components/dashboard/RevenueChart.astro";
@@ -21,20 +19,17 @@ if (!user) {
     <main>
       <h1 class="font-lusitana mb-4 text-xl md:text-2xl">Dashboard</h1>
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Suspense>
-          <CardWrapper />
+        <CardWrapper server:defer>
           <CardsSkeleton slot="fallback" />
-        </Suspense>
+        </CardWrapper>
       </div>
       <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        <Suspense>
-          <RevenueChart />
+        <RevenueChart server:defer>
           <RevenueChartSkeleton slot="fallback" />
-        </Suspense>
-        <Suspense>
-          <LatestInvoices />
+        </RevenueChart>
+        <LatestInvoices server:defer>
           <LatestInvoicesSkeleton slot="fallback" />
-        </Suspense>
+        </LatestInvoices>
       </div>
     </main>
   </DashboardLayout>

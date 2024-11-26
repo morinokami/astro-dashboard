@@ -6,13 +6,13 @@ export function DeleteInvoice({ id }: { id: string }) {
     <form
       onSubmit={async (e) => {
         e.preventDefault();
+
         const formData = new FormData(e.target as HTMLFormElement);
         formData.set("id", id);
 
-        const result = await actions.deleteInvoice(formData);
-        console.log(result);
+        const { error } = await actions.invoice.delete(formData);
 
-        if (result.success) {
+        if (error === undefined) {
           window.location.reload();
         }
       }}

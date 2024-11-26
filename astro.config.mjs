@@ -3,7 +3,6 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/serverless";
 import { defineConfig } from "astro/config";
-import simpleStackStream from "simple-stack-stream";
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,8 +10,6 @@ export default defineConfig({
   adapter: vercel({
     imageService: true,
   }),
-  integrations: [db(), react(), simpleStackStream(), tailwind()],
-  experimental: {
-    actions: true,
-  },
+  integrations: [db(), react(), tailwind()],
+  experimental: { serverIslands: true },
 });

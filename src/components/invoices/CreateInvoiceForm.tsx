@@ -4,7 +4,7 @@ import {
   CurrencyDollarIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
-import { actions } from "astro:actions";
+import { actions, isInputError } from "astro:actions";
 import { useState } from "react";
 
 import { Button } from "@/components/Button";
@@ -34,18 +34,24 @@ export default function CreateInvoiceForm({
     <form
       onSubmit={async (e) => {
         e.preventDefault();
+
         const formData = new FormData(e.target as HTMLFormElement);
 
-        const { success, message, errors } =
-          await actions.createInvoice(formData);
+        const { error } = await actions.invoice.create(formData);
 
-        if (success) {
+        if (error === undefined) {
           window.location.href = "/dashboard/invoices";
         } else {
-          setFormState({
-            message,
-            errors,
-          });
+          if (isInputError(error)) {
+            setFormState({
+              errors: error.fields,
+              message: "Missing Fields. Failed to Create Invoice.",
+            });
+          } else {
+            setFormState({
+              message: error.message,
+            });
+          }
         }
       }}
     >

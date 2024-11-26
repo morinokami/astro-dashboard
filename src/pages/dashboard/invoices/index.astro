@@ -1,6 +1,4 @@
 ---
-import { Suspense } from "simple-stack-stream/components";
-
 import Search from "@/components/Search";
 import CreateInvoice from "@/components/invoices/CreateInvoice.astro";
 import InvoicesTable from "@/components/invoices/InvoicesTable.astro";
@@ -37,10 +35,9 @@ const totalPages = await fetchInvoicesPages(query);
         />
         <CreateInvoice />
       </div>
-      <Suspense>
-        <InvoicesTable query={query} currentPage={currentPage} />
+      <InvoicesTable query={query} currentPage={currentPage} server:defer>
         <InvoicesTableSkeleton slot="fallback" />
-      </Suspense>
+      </InvoicesTable>
       <div class="mt-5 flex w-full justify-center">
         <Pagination
           totalPages={totalPages}
